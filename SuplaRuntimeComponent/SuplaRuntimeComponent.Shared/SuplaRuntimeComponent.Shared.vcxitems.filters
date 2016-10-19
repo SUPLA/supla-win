@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaLocation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaClient4Win_RTC.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaRegisterResult.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaChannel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaChannelValue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaEvent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SuplaChannelValueUpdate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaLocation.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaClient4Win_RTC.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaRegisterResult.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaChannel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaChannelValue.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaEvent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SuplaChannelValueUpdate.cpp" />
+  </ItemGroup>
+</Project>
