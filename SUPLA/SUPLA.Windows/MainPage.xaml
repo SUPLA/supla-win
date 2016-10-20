@@ -9,7 +9,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button x:Name="button" Content="Connect" HorizontalAlignment="Left" Margin="36,25,0,0" VerticalAlignment="Top" Click="button_Click"/>
-        <Button x:Name="button1" Content="Disconnect" HorizontalAlignment="Left" Margin="140,25,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.95,-1.947" Click="button1_Click"/>
+        <Button x:Name="button1" Content="Disconnect" HorizontalAlignment="Left" Margin="264,25,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.95,-1.947" Click="button1_Click"/>
         <TextBox x:Name="tbServer" HorizontalAlignment="Left" Margin="39,86,0,0" TextWrapping="Wrap" Text="svr1.supla.org" VerticalAlignment="Top" RenderTransformOrigin="-7.486,-4.625" Width="330"/>
         <TextBox x:Name="tbAccessID" HorizontalAlignment="Left" Margin="39,144,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top"/>
         <TextBox x:Name="tbPassword" HorizontalAlignment="Left" Margin="136,144,0,0" TextWrapping="Wrap" Text="1jGhrc" VerticalAlignment="Top" Width="233"/>

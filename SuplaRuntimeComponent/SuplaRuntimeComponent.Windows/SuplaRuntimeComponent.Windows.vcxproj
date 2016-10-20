@@ -132,7 +132,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>..\..\Debug\SuplaClient.Windows\SuplaClient.Windows.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\Release\OpenSSL.WindowsStore\libeay32.lib;..\..\Release\OpenSSL.WindowsStore\ssleay32.lib;..\..\Debug\SuplaClient.Windows\SuplaClient.Windows.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -147,7 +147,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\Release\OpenSSL.WindowsStore\libeay32.lib;..\..\Release\OpenSSL.WindowsStore\ssleay32.lib;..\..\Release\SuplaClient.Windows\SuplaClient.Windows.lib;Ws2_32.lib;runtimeobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>

@@ -124,7 +124,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>..\..\ARM\Debug\SuplaClient.WindowsPhone\SuplaClient.WindowsPhone.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\ARM\OpenSSL\libeay32.lib;..\..\ARM\OpenSSL\ssleay32.lib;..\..\ARM\Debug\SuplaClient.WindowsPhone\SuplaClient.WindowsPhone.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -139,6 +139,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>..\..\ARM\OpenSSL\libeay32.lib;..\..\ARM\OpenSSL\ssleay32.lib;..\..\ARM\Release\SuplaClient.WindowsPhone\SuplaClient.WindowsPhone.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

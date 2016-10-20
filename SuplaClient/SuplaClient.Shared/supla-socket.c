@@ -14,9 +14,15 @@
 	#include <fcntl.h>
 	#include <assert.h>
 	#include <WinSock2.h>
+    #include <openssl/ssl.h>
+    #include <openssl/err.h>
 
     #define MSG_DONTWAIT 0
-	#define NOSSL
+
+    #define int32_t int
+    #define uint32_t unsigned int
+
+	#define _SERVER_EXCLUDED
 
 #else
 
@@ -82,6 +88,7 @@ struct CRYPTO_dynlock_value
 };
 
 #ifndef NOSSL
+#ifndef _SERVER_EXCLUDED
 static void **ssl_locks = NULL;
 
 static void ssocket_ssl_locking_function(int mode, int n, const char *file, int line)
@@ -133,18 +140,6 @@ static void ssocket_ssl_dyn_destroy_function(struct CRYPTO_dynlock_value *l,
     free(l);
 }
 
-void ssocket_ssl_error_log(void) {
-    char *errstr;
-	int code;
-	do {
-		code = ERR_get_error();
-		if ( code ) {
-			errstr = ERR_error_string(code, NULL);
-			supla_log(LOG_ERR, errstr);
-		}
-	} while(code);
-}
-
 SSL_CTX* ssocket_initserverctx(void) {
 
 	SSL_METHOD *method;
@@ -190,6 +185,7 @@ unsigned char ssocket_loadcertificates(SSL_CTX* ctx, const char* CertFile, const
 
     return 1;
 }
+#endif /*ifndef _SERVER_EXCLUDED*/
 
 void ssocket_showcerts(SSL* ssl) {
 
@@ -210,6 +206,18 @@ void ssocket_showcerts(SSL* ssl) {
     }
     else
     	supla_log(LOG_DEBUG, "No certificates.");
+}
+
+void ssocket_ssl_error_log(void) {
+	char *errstr;
+	int code;
+	do {
+		code = ERR_get_error();
+		if (code) {
+			errstr = ERR_error_string(code, NULL);
+			supla_log(LOG_ERR, errstr);
+		}
+	} while (code);
 }
 
 int32_t ssocket_ssl_error(TSuplaSocket *supla_socket, int ret_code) {
@@ -269,7 +277,7 @@ SSL_CTX* ssocket_client_initctx(void) {
 }
 #endif /*ifndef NOSSL*/
 
-#ifndef _WIN32
+#ifndef _SERVER_EXCLUDED
 char ssocket_openlistener(void *_ssd) {
 
 	int sd, sflag;
@@ -369,7 +377,7 @@ void *ssocket_server_init(const char cert[], const char key[], int port, unsigne
 
 	return ssd;
 }
-#endif /*ifndef _WIN32*/
+#endif /*ifndef _SERVER_EXCLUDED*/
 
 void ssocket_free(void *_ssd) {
 
@@ -382,21 +390,23 @@ void ssocket_free(void *_ssd) {
 
 		 int i;
 
-		 if (ssl_locks != 0 ) {
+		 #ifndef _SERVER_EXCLUDED
+			 if (ssl_locks != 0 ) {
 
-			    CRYPTO_set_dynlock_create_callback(NULL);
-			    CRYPTO_set_dynlock_lock_callback(NULL);
-			    CRYPTO_set_dynlock_destroy_callback(NULL);
+					CRYPTO_set_dynlock_create_callback(NULL);
+					CRYPTO_set_dynlock_lock_callback(NULL);
+					CRYPTO_set_dynlock_destroy_callback(NULL);
 
-			    CRYPTO_set_locking_callback(NULL);
-			    CRYPTO_set_id_callback(NULL);
+					CRYPTO_set_locking_callback(NULL);
+					CRYPTO_set_id_callback(NULL);
 
-			    for (i = 0; i < CRYPTO_num_locks(); i++) {
-			    	lck_free(ssl_locks[i]);
-			    }
-			    free(ssl_locks);
-			    ssl_locks = NULL;
-		    }
+					for (i = 0; i < CRYPTO_num_locks(); i++) {
+			    		lck_free(ssl_locks[i]);
+					}
+					free(ssl_locks);
+					ssl_locks = NULL;
+				}
+		 #endif /*ndef _SERVER_EXCLUDED*/
 		 #endif /*ifndef NOSSL*/
 
 
@@ -411,7 +421,7 @@ void ssocket_free(void *_ssd) {
 
 }
 
-#ifndef _WIN32
+#ifndef _SERVER_EXCLUDED
 char ssocket_accept(void *_ssd, unsigned int *ipv4, void **_supla_socket) {
 
 	 struct sockaddr_in addr;
@@ -529,7 +539,7 @@ char ssocket_accept_ssl(void *_ssd, void *_supla_socket) {
      return supla_socket->sfd == -1 ? 0 : 1;
 #endif /*ifdef NOSSL*/
 }
-#endif /*ifndef _WIN32*/
+#endif /*ifndef _SERVER_EXCLUDED*/
 
 void ssocket_supla_socket_close(void *_supla_socket) {
 
@@ -610,7 +620,7 @@ int ssocket_client_openconnection(TSuplaSocketData *ssd, const char *state_file,
     ssd->supla_socket.sfd = -1;
 
 	#ifdef _WIN32
-		struct addrinfo hints, *res;
+		//struct addrinfo hints, *res;
 
 		if (WSAStartup(MAKEWORD(2, 2), &ssd->supla_socket.wsaData) != 0) {
 			return  ssd->supla_socket.sfd;
@@ -687,8 +697,10 @@ int ssocket_client_openconnection(TSuplaSocketData *ssd, const char *state_file,
     }
     
 	#ifdef _WIN32
-		u_long iMode = 1;
-		ioctlsocket(ssd->supla_socket.sfd, FIONBIO, &iMode);
+		if (ssd->secure == 0) {
+			u_long iMode = 1;
+			ioctlsocket(ssd->supla_socket.sfd, FIONBIO, &iMode);
+		}
 	#endif /*ifdef _WIN32*/
 
     return ssd->supla_socket.sfd;
@@ -754,7 +766,12 @@ unsigned char ssocket_client_connect(void *_ssd, const char *state_file, int *er
 
 		} else {
 
+			#ifdef _WIN32
+			u_long iMode = 1;
+			ioctlsocket(ssd->supla_socket.sfd, FIONBIO, &iMode);
+			#else
     		fcntl(ssd->supla_socket.sfd, F_SETFL, O_NONBLOCK);
+			#endif
 
     		supla_log(LOG_DEBUG, "Connected with %s encryption", SSL_get_cipher(ssd->supla_socket.ssl));
     		SSL_get_cipher(ssd->supla_socket.ssl);

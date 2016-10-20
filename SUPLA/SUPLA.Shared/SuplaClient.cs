@@ -42,8 +42,6 @@ namespace SUPLA
 
             sc_rtc = new SuplaClient4Win_RTC();
             sc_rtc.setClientGUID(GUID);
-            sc_rtc.setPort(2015);
-            sc_rtc.setSSLEnabled(false);
 
             String Name = i.FriendlyName;
                    
