@@ -22,7 +22,9 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-![Rr]elease/OpenSSL.*/*.lib
+!Release/OpenSSL.WindowsStore/libeay32.lib
+!Release/OpenSSL.WindowsStore/openssl.lib
+!Release/OpenSSL.WindowsStore/ssleay32.lib
 
 # Visual Studio 2015 cache/options directory
 .vs/
